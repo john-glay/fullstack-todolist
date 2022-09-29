@@ -9,14 +9,11 @@ export default function TodoBody() {
   const update = useSelector((state) => state.update);
   const [editInput, setEditInput] = useState(update ? update.text : "");
 
-  const { getAllTodo, removeTodo } = bindActionCreators(
+  const { getAllTodo, removeTodo, updateTodo } = bindActionCreators(
     actionTodo,
     useDispatch()
   );
-  const { setUpdateTodo, saveUpdateTodo } = bindActionCreators(
-    actionUpdate,
-    useDispatch()
-  );
+  const { setUpdateTodo } = bindActionCreators(actionUpdate, useDispatch());
 
   useEffect(() => {
     getAllTodo();
@@ -28,8 +25,8 @@ export default function TodoBody() {
   };
 
   const saveUpdate = (id) => {
-    const updatedTodo = { id, text: editInput };
-    saveUpdateTodo(updatedTodo);
+    const body = { todoId: id, text: editInput };
+    updateTodo(body);
   };
 
   return todos.map((data, index) => (
@@ -38,23 +35,23 @@ export default function TodoBody() {
         <div className="content">
           <input
             className="text"
-            value={update.todoId !== data.todoId ? data.todo : editInput}
+            value={update.todoID !== data.todoID ? data.todo : editInput}
             onChange={(e) => setEditInput(e.target.value)}
-            readOnly={update.todoId !== data.todoId}
+            readOnly={update.todoID !== data.todoID}
           />
         </div>
         <div className="actions">
-          {update.todoId !== data.todoId ? (
+          {update.todoID !== data.todoID ? (
             <button className="edit" onClick={() => setUpdate(data)}>
               Edit
             </button>
           ) : (
-            <button className="edit" onClick={() => saveUpdate(data.todoId)}>
+            <button className="edit" onClick={() => saveUpdate(data.todoID)}>
               Save
             </button>
           )}
-          {update.todoId !== data.todoId && (
-            <button className="delete" onClick={() => removeTodo(data.todoId)}>
+          {update.todoID !== data.todoID && (
+            <button className="delete" onClick={() => removeTodo(data.todoID)}>
               Delete
             </button>
           )}
